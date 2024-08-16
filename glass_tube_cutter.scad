@@ -41,21 +41,22 @@ HOLDER_T = 15;
 HOLDER_STEM_T = 40;
 HOLDER_STEM_L = 40;
 
-BASE_SX = 400; // Ooh, I might have to bust out my treadmill printer for this.  I guess you could split the base into the holder and the rotator.
+// Ooh, I might have to bust out my treadmill printer for this.  I guess you could split the base into the holder and the rotator.
+// You could also like, add holes that run lengthwise, and jam dowels down them to attach multiple segments.
+BASE_SX = 400;
 BASE_SY = 200;
 BASE_SZ = 30;
 echo(BRICK_SY);
 
 // Currently abt 162mm tall
 //translate([0,0,BASE_SZ])
-{
+difference() {
+union() {
 
 /*
 Todo:
 Cable tie-down holes
-Base
 Switch mount
-Dimmer mount
 Rotation mechanism
   Slide up/down
   Slide forward/backward
@@ -77,7 +78,44 @@ difference() {
 }
 
 // Dimmer //DUMMY Remove
-color("RED") translate([BRICK_SX+HOLDER_T-DIMMER_SX,-DIMMER_SY-HOLDER_STEM_T,0]) cube([DIMMER_SX,DIMMER_SY,DIMMER_SZ]);
+if ($preview) {
+  color("RED") translate([BRICK_SX+HOLDER_T-DIMMER_SX,-DIMMER_SY-HOLDER_STEM_T,0]) cube([DIMMER_SX,DIMMER_SY,DIMMER_SZ]);
+}
+
+// Switch //DUMMY Remove
+SWITCH_MARGIN = 25;
+SWITCH_SETBACK = 10;
+SWITCH_HOUSING_T = 5;
+SWITCH_LATCH_LEEWAY = 5;
+SWITCH_ELEVATION = SWITCH_S_TALL+10;
+if ($preview) {
+  color("RED")
+  translate([0,SWITCH_SETBACK,SWITCH_ELEVATION])
+  translate([BRICK_SX+HOLDER_T-DIMMER_SX-SWITCH_S_WIDTH-SWITCH_MARGIN,-DIMMER_SY-HOLDER_STEM_T,0])
+  rx(45)
+  cube([SWITCH_S_WIDTH,SWITCH_S_TALL,SWITCH_S_DEEP]);
+}
+
+HOUSING_SZ = SWITCH_S_TALL+2*SWITCH_LATCH_LEEWAY+2*SWITCH_HOUSING_T;
+
+// Switch holder
+// I'm probably going to regret making this symmetrical at the cost of easy access
+translate([0,SWITCH_SETBACK,SWITCH_ELEVATION])
+  translate([BRICK_SX+HOLDER_T-DIMMER_SX-SWITCH_S_WIDTH-SWITCH_MARGIN,-DIMMER_SY-HOLDER_STEM_T,0])
+  rx(45)
+  difference() {
+  union() {
+    translate([-SWITCH_HOUSING_T,-SWITCH_HOUSING_T-SWITCH_LATCH_LEEWAY,-HOUSING_SZ+SWITCH_S_DEEP])
+      cube([SWITCH_S_WIDTH+2*SWITCH_HOUSING_T, HOUSING_SZ, HOUSING_SZ]);
+    SWITCH_CENTER_Z = frotate([45,0,0],[0,-(HOUSING_SZ-SWITCH_S_TALL)/2,SWITCH_S_DEEP])[2]+SWITCH_ELEVATION;
+    translate([0,-(HOUSING_SZ-SWITCH_S_TALL)/2,SWITCH_S_DEEP])
+      rx(-45)
+      tz(-SWITCH_CENTER_Z)
+      tx(-SWITCH_HOUSING_T) cube([SWITCH_S_WIDTH+2*SWITCH_HOUSING_T, HOUSING_SZ*sqrt(2),SWITCH_CENTER_Z]);
+  }
+  ty(-SWITCH_LATCH_LEEWAY) tz(-$FOREVER) cube([SWITCH_S_WIDTH, SWITCH_S_TALL+2*SWITCH_LATCH_LEEWAY, $FOREVER]);
+  tz(-$FOREVER/2) cube([SWITCH_S_WIDTH, SWITCH_S_TALL, $FOREVER]);
+}
 
 // Brick holder
 tz(HOLDER_STEM_L) rx(45)
@@ -89,4 +127,6 @@ difference() {
   cube([BRICK_SX, $FOREVER, $FOREVER]);
 }
 
+}
+//OXm([15,0,0]);
 }
