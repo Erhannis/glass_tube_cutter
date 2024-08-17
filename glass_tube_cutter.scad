@@ -71,13 +71,6 @@ X_SLIDE_GUIDE_L = BASE_SX - (2*HOLDER_STEM_T+BRICK_SX);
 X_SLIDE_TRACK_T = 6;
 X_SLIDE_TRACK_MARGIN = 10+X_SLIDE_TRACK_T/2;
 
-module cableTie(t=4,d=10,h=$FOREVER) {
-  translate([-t/2,-(d+t)/2,0]) {
-    ctranslate([0,d,0]) cube([t,t,h]);
-    cube([t,d+t,t]);
-  }
-}
-
 // Currently abt 147mm tall
 //translate([0,0,BASE_SZ])
 difference() {
