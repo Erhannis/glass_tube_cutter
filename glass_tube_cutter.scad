@@ -46,7 +46,12 @@ HOLDER_STEM_L = 40;
 BASE_SX = 400;
 BASE_SY = 200;
 BASE_SZ = 30;
-echo(BRICK_SY);
+
+SWITCH_MARGIN = 25;
+SWITCH_SETBACK = 10;
+SWITCH_HOUSING_T = 5;
+SWITCH_LATCH_LEEWAY = 5;
+SWITCH_ELEVATION = SWITCH_S_TALL+10;
 
 // Currently abt 162mm tall
 //translate([0,0,BASE_SZ])
@@ -77,17 +82,12 @@ difference() {
   }
 }
 
-// Dimmer //DUMMY Remove
+// Dimmer (do not print)
 if ($preview) {
   color("RED") translate([BRICK_SX+HOLDER_T-DIMMER_SX,-DIMMER_SY-HOLDER_STEM_T,0]) cube([DIMMER_SX,DIMMER_SY,DIMMER_SZ]);
 }
 
-// Switch //DUMMY Remove
-SWITCH_MARGIN = 25;
-SWITCH_SETBACK = 10;
-SWITCH_HOUSING_T = 5;
-SWITCH_LATCH_LEEWAY = 5;
-SWITCH_ELEVATION = SWITCH_S_TALL+10;
+// Switch (do not print)
 if ($preview) {
   color("RED")
   translate([0,SWITCH_SETBACK,SWITCH_ELEVATION])
